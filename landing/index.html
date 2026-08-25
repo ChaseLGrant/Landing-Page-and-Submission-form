@@ -1095,7 +1095,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     deliver(d).then(function(){
       px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
       var n=(d.athlete_first||'').trim();
-      if(n) document.getElementById('doneName').textContent=n;
+      var nameEl=document.getElementById('doneName');
+      if(n && nameEl) nameEl.textContent=n;
       showEnd('done');
     }).catch(function(err){
       console.error('[TAM] submit failed:', err);
