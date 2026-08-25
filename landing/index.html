@@ -1041,14 +1041,24 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
      because Netlify Forms is the source of truth and drives the success UI. */
   var SHEET_ON = /^https:\/\/script\.google\.com\//.test(CONFIG.sheetEndpoint || '');
   function sendToSheet(data){
-    if(!SHEET_ON) return;
+    if(!SHEET_ON){ console.log('[TAM] Sheet endpoint not configured, skipping.'); return; }
     try{
-      /* Use GET with query-string params. Apps Script always 302-redirects,
-         which converts POST→GET per HTTP spec and drops the body when
-         mode:'no-cors'. Sending as GET avoids that entirely. */
-      var url = CONFIG.sheetEndpoint + '?' + encodeForm(data);
-      fetch(url, {method:'GET', mode:'no-cors', keepalive:true});
-    }catch(e){ /* never block the funnel on the sheet */ }
+      var qs = encodeForm(data);
+      var url = CONFIG.sheetEndpoint + '?' + qs;
+      console.log('[TAM] Sending lead to Google Sheet…');
+
+      /* Primary: Image beacon — browsers follow 302 redirects reliably for
+         <img> requests, even during page transitions / DOM changes. */
+      var img = new Image();
+      img.onload = function(){ console.log('[TAM] Sheet request completed (img).'); };
+      img.onerror = function(){ console.log('[TAM] Sheet img finished (opaque redirect is normal).'); };
+      img.src = url;
+
+      /* Secondary: fetch as backup, in case the image approach is blocked. */
+      fetch(url, {method:'GET', mode:'no-cors', credentials:'omit'})
+        .then(function(){ console.log('[TAM] Sheet fetch completed.'); })
+        .catch(function(e){ console.warn('[TAM] Sheet fetch error (img may still succeed):', e); });
+    }catch(e){ console.error('[TAM] sendToSheet exception:', e); }
   }
   /* Deliver a lead to every configured destination at once. */
   function deliver(data){
@@ -1092,8 +1102,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     delete d.company;
 
     setSubmitting(true, btn);
+    console.log('[TAM] Submitting lead…', {outcome: d.outcome, email: d.email ? '✓' : '✗'});
     sendToSheet(d);
-    postWithRetry(d).catch(function(err){ console.warn('[TAM] Netlify Forms failed (sheet still sent):', err); });
+    postWithRetry(d)
+      .then(function(){ console.log('[TAM] Netlify Forms accepted the lead.'); })
+      .catch(function(err){ console.warn('[TAM] Netlify Forms failed (sheet still sent):', err); });
     px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
     showEnd('done');
   });
