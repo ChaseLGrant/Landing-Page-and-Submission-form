@@ -778,14 +778,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 
       <div class="end" id="done">
         <div class="ico"><svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg></div>
-        <h3>Application received.</h3>
-        <p>Thank you &mdash; we have what we need to take a first look at <span id="doneName">your athlete</span>.</p>
-        <ul class="nx">
-          <li><span class="k">1</span><span>We review the application, any film you shared, and the grad year against current program timelines.</span></li>
-          <li><span class="k">2</span><span>You'll hear from us within one to two business days &mdash; either way.</span></li>
-          <li><span class="k">3</span><span>If it's a fit, we'll schedule the consultation and walk you through exactly what we'd do and what it costs.</span></li>
-        </ul>
-        <p style="margin-top:18px">In the meantime, pull together recent film and a current transcript. It makes the first conversation far more useful.</p>
+        <h3>Thanks!</h3>
+        <p>We will reach out as soon as we can. In the meantime, pull together recent film and a current transcript &mdash; it makes the first conversation far more useful.</p>
       </div>
 
       <div class="end" id="offramp">
@@ -1059,7 +1053,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   /* Deliver a lead to every configured destination at once. */
   function deliver(data){
     sendToSheet(data);
-    return postWithRetry(data);
+    return postWithRetry(data).catch(function(err){
+      console.warn('[TAM] Netlify Forms failed (sheet still sent):', err);
+    });
   }
 
   var submitting = false;
@@ -1096,16 +1092,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     delete d.company;
 
     setSubmitting(true, btn);
-    deliver(d).then(function(){
-      px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
-      var n=(d.athlete_first||'').trim();
-      if(n) document.getElementById('doneName').textContent=n;
-      showEnd('done');
-    }).catch(function(err){
-      console.error('[TAM] submit failed:', err);
-      setSubmitting(false, btn);
-      showSubmitError();
-    });
+    sendToSheet(d);
+    postWithRetry(d).catch(function(err){ console.warn('[TAM] Netlify Forms failed (sheet still sent):', err); });
+    px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
+    showEnd('done');
   });
 
   document.getElementById('heroStart').addEventListener('click',function(){
