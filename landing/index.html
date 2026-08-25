@@ -504,8 +504,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     </div>
     <div class="founder">
       <div class="rv">
+        <!-- FOUNDER PHOTO: replace the src below with a real headshot for best
+             conversion (e.g. src="founder.jpg"). Until then this shows a clean,
+             on-brand avatar placeholder instead of an "unfinished" gray box. -->
         <div class="frame"><img alt="Chase Grant, founder of The Athlete Market"
-          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><rect width='400' height='500' fill='%23F7F9FC'/><circle cx='200' cy='195' r='62' fill='none' stroke='%23C6D2E6' stroke-width='2'/><path d='M104 400c0-53 43-96 96-96s96 43 96 96' fill='none' stroke='%23C6D2E6' stroke-width='2'/><text x='200' y='458' font-family='sans-serif' font-size='14' font-weight='700' letter-spacing='1.5' fill='%23586274' text-anchor='middle'>ADD PHOTOGRAPH</text></svg>"></div>
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23EFF6FF'/><stop offset='1' stop-color='%23DCE9FF'/></linearGradient></defs><rect width='400' height='500' fill='url(%23g)'/><circle cx='200' cy='196' r='60' fill='%23155DFC' opacity='0.55'/><path d='M104 372c0-42 43-72 96-72s96 30 96 72v34H104z' fill='%23155DFC' opacity='0.55'/></svg>"></div>
         <p class="cap">Chase Grant &middot; Founder</p>
       </div>
       <div class="rv body">
@@ -968,22 +971,36 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     if(back && cur>0){cur--;render(true)}
   });
 
+  // Auto-advance a data-auto step once, debounced so a change + click on the
+  // same option (which both fire) can't skip a step.
+  function autoAdvanceFrom(st){
+    if(!st || !st.hasAttribute('data-auto') || st._adv) return;
+    st._adv = true;
+    setTimeout(function(){ st._adv = false; advance(); }, reduce?0:260);
+  }
   form.addEventListener('change',function(e){
     var i=e.target;
     if(!i.matches('.opt input')) return;
-    if(i.type==='radio'){
-      document.getElementsByName(i.name).forEach(function(r){
-        r.closest('.opt').classList.toggle('on',r.checked)});
-    } else { i.closest('.opt').classList.toggle('on',i.checked) }
-    var st=i.closest('[data-step]'); st.classList.remove('bad');
-    if(i.type==='radio' && st.hasAttribute('data-auto')){i._justChanged=true; setTimeout(advance, reduce?0:260);}
-  });
-  form.addEventListener('click',function(e){
-    var i=e.target.closest&&e.target.closest('.opt input');
-    if(!i||i.type!=='radio') return;
-    if(i._justChanged){delete i._justChanged;return;}
     var st=i.closest('[data-step]');
-    if(st&&st.hasAttribute('data-auto')&&i.checked) setTimeout(advance, reduce?0:260);
+    if(i.type==='radio'){
+      // Scope to THIS step. A document-wide getElementsByName() also matched the
+      // hidden Netlify detection form's like-named inputs (not inside a .opt), so
+      // closest('.opt') was null and threw — which broke selection + auto-advance
+      // on every radio step (first visible at Q4).
+      st.querySelectorAll('.opt input[name="'+i.name+'"]').forEach(function(r){
+        r.closest('.opt').classList.toggle('on', r.checked);
+      });
+      autoAdvanceFrom(st);
+    } else { i.closest('.opt').classList.toggle('on', i.checked); }
+    st.classList.remove('bad');
+  });
+  // Re-clicking an already-selected radio (e.g. after Back) fires no change event,
+  // so advance on the click too — the debounce prevents a double-advance.
+  form.addEventListener('click',function(e){
+    var opt = e.target.closest && e.target.closest('.opt');
+    if(!opt) return;
+    var inp = opt.querySelector('input[type=radio]');
+    if(inp && inp.checked) autoAdvanceFrom(opt.closest('[data-step]'));
   });
   form.addEventListener('input',function(e){
     var f=e.target.closest&&e.target.closest('.field'); if(f) f.classList.remove('bad');
