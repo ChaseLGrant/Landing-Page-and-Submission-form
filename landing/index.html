@@ -982,7 +982,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
         r.closest('.opt').classList.toggle('on',r.checked)});
     } else { i.closest('.opt').classList.toggle('on',i.checked) }
     var st=i.closest('[data-step]'); st.classList.remove('bad');
-    if(i.type==='radio' && st.hasAttribute('data-auto')) setTimeout(advance, reduce?0:260);
+    if(i.type==='radio' && st.hasAttribute('data-auto')){i._justChanged=true; setTimeout(advance, reduce?0:260);}
+  });
+  form.addEventListener('click',function(e){
+    var i=e.target.closest&&e.target.closest('.opt input');
+    if(!i||i.type!=='radio') return;
+    if(i._justChanged){delete i._justChanged;return;}
+    var st=i.closest('[data-step]');
+    if(st&&st.hasAttribute('data-auto')&&i.checked) setTimeout(advance, reduce?0:260);
   });
   form.addEventListener('input',function(e){
     var f=e.target.closest&&e.target.closest('.field'); if(f) f.classList.remove('bad');
