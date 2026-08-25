@@ -44,11 +44,14 @@ var COLUMNS = [
 ];
 
 function doPost(e) {
+  var p = (e && e.parameter) ? e.parameter : {};
+  return writeRow(p);
+}
+
+function writeRow(p) {
   var lock = LockService.getScriptLock();
   lock.tryLock(20000); // serialize writes so rows never collide
   try {
-    var p = (e && e.parameter) ? e.parameter : {};
-
     // Combine the split name fields into friendly single columns.
     p.parent_name  = [p.parent_first, p.parent_last].filter(String).join(' ').trim();
     p.athlete      = [p.athlete_first, p.athlete_last].filter(String).join(' ').trim();
@@ -70,8 +73,16 @@ function doPost(e) {
   }
 }
 
-// A GET on the URL is handy for a quick "is it deployed?" check in a browser.
-function doGet() {
+// doGet now doubles as the lead-capture endpoint. The landing page sends data
+// as query-string parameters (GET) because Apps Script's 302 redirect converts
+// a no-cors POST into a GET and drops the body. If no parameters are present
+// (bare URL visit) it still returns the health-check JSON.
+function doGet(e) {
+  var p = (e && e.parameter) ? e.parameter : {};
+  // If real form fields are present, write the row.
+  if (p.email || p.phone || p.parent_first || p.athlete_first) {
+    return writeRow(p);
+  }
   return json({ ok: true, service: 'athlete-market-leads' });
 }
 
