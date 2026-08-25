@@ -1,0 +1,19 @@
+# Netlify deploy config — The Athlete Market landing page.
+# The site is a self-contained static page served from ./landing.
+# No build step runs (this repo also contains an unrelated Next.js app that
+# should NOT be built for this deploy).
+
+[build]
+  publish = "landing"
+  command = ""
+
+# Lead capture uses Netlify Forms (see the hidden detection form in
+# landing/index.html). Submissions appear under Site → Forms in Netlify.
+# Add email/Slack notifications there under Forms → Form notifications.
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
