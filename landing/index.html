@@ -358,7 +358,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
      field names the funnel can send are listed here so every one is
      captured in the Netlify dashboard / email notifications.
      ============================================================ -->
-<form name="athlete-market" data-netlify="true" netlify-honeypot="bot-field" hidden>
+<form name="athlete-market" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
   <input type="text" name="sport"><input type="text" name="grad_year">
   <input type="text" name="athlete_first"><input type="text" name="athlete_last">
   <input type="text" name="high_school"><input type="text" name="city_state">
@@ -826,7 +826,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
      ========================================================================== */
   var CONFIG = {
     formName: "athlete-market",
-    fallbackEmail: "",   // e.g. "chase@theathletemarket.com" — shown only if a submit fails
+    fallbackEmail: "chase@theathletemarket.com",   // shown only if a submit fails
     fallbackPhone: "",   // optional, e.g. "(760) 555-0148"
 
     /* ==== META (FACEBOOK) PIXEL ==============================================
@@ -1105,10 +1105,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     console.log('[TAM] Submitting lead…', {outcome: d.outcome, email: d.email ? '✓' : '✗'});
     sendToSheet(d);
     postWithRetry(d)
-      .then(function(){ console.log('[TAM] Netlify Forms accepted the lead.'); })
-      .catch(function(err){ console.warn('[TAM] Netlify Forms failed (sheet still sent):', err); });
-    px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
-    showEnd('done');
+      .then(function(){
+        console.log('[TAM] Netlify Forms accepted the lead.');
+        px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
+        showEnd('done');
+      })
+      .catch(function(err){
+        console.error('[TAM] Netlify Forms failed:', err);
+        setSubmitting(false, btn);
+        showSubmitError();
+      });
   });
 
   document.getElementById('heroStart').addEventListener('click',function(){
