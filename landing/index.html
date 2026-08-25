@@ -1092,17 +1092,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     delete d.company;
 
     setSubmitting(true, btn);
-    deliver(d).then(function(){
-      px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
-      var n=(d.athlete_first||'').trim();
-      var nameEl=document.getElementById('doneName');
-      if(n && nameEl) nameEl.textContent=n;
-      showEnd('done');
-    }).catch(function(err){
-      console.error('[TAM] submit failed:', err);
-      setSubmitting(false, btn);
-      showSubmitError();
-    });
+    sendToSheet(d);
+    postWithRetry(d).catch(function(err){ console.warn('[TAM] Netlify Forms failed (sheet still sent):', err); });
+    px('Lead', {content_name:'Recruiting Application', content_category:d.sport||''});
+    showEnd('done');
   });
 
   document.getElementById('heroStart').addEventListener('click',function(){
