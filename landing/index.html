@@ -504,11 +504,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     </div>
     <div class="founder">
       <div class="rv">
-        <!-- FOUNDER PHOTO: replace the src below with a real headshot for best
-             conversion (e.g. src="founder.jpg"). Until then this shows a clean,
-             on-brand avatar placeholder instead of an "unfinished" gray box. -->
-        <div class="frame"><img alt="Chase Grant, founder of The Athlete Market"
-          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23EFF6FF'/><stop offset='1' stop-color='%23DCE9FF'/></linearGradient></defs><rect width='400' height='500' fill='url(%23g)'/><circle cx='200' cy='196' r='60' fill='%23155DFC' opacity='0.55'/><path d='M104 372c0-42 43-72 96-72s96 30 96 72v34H104z' fill='%23155DFC' opacity='0.55'/></svg>"></div>
+        <!-- FOUNDER PHOTO: upload your headshot as landing/founder.jpg (same
+             folder as this file) and it appears automatically. Until the file
+             exists, a clean on-brand avatar shows instead of a broken image. -->
+        <div class="frame"><img id="founderImg" alt="Chase Grant, founder of The Athlete Market" src="founder.jpg"></div>
         <p class="cap">Chase Grant &middot; Founder</p>
       </div>
       <div class="rv body">
@@ -871,6 +870,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   function fireStart(){ if(startFired) return; startFired = true; px('ApplicationStarted', {}, true); }
 
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* Founder photo: fall back to a clean on-brand avatar if founder.jpg is not
+     present yet, so the section never shows a broken image. */
+  (function(){
+    var fi = document.getElementById('founderImg');
+    if(!fi) return;
+    var AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23EFF6FF'/><stop offset='1' stop-color='%23DCE9FF'/></linearGradient></defs><rect width='400' height='500' fill='url(%23g)'/><circle cx='200' cy='196' r='60' fill='%23155DFC' opacity='0.55'/><path d='M104 372c0-42 43-72 96-72s96 30 96 72v34H104z' fill='%23155DFC' opacity='0.55'/></svg>";
+    function fallback(){ if(fi.src.indexOf('data:image/svg')!==0) fi.src = AVATAR; }
+    fi.addEventListener('error', fallback);
+    if(fi.complete && fi.naturalWidth === 0) fallback();
+  })();
 
   if('IntersectionObserver' in window && !reduce){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
