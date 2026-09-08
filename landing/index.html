@@ -251,6 +251,17 @@ p{margin:0}
   border-left:4px solid var(--accent);border-radius:12px;padding:18px 22px}
 .scarcity strong{color:var(--accent)}
 
+/* ---------- testimonials ---------- */
+.tstwrap{display:grid;gap:16px;margin-top:36px}
+@media(min-width:640px){.tstwrap{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.tstwrap{grid-template-columns:repeat(3,1fr)}}
+.tst{background:#fff;border:1px solid var(--line);border-radius:var(--card);padding:24px 22px;
+  box-shadow:0 2px 8px rgba(11,17,32,.04);display:flex;flex-direction:column}
+.tst .stars{color:#F5A524;font-size:15px;letter-spacing:2px;margin-bottom:12px}
+.tst p{font-size:15px;color:var(--muted);line-height:1.6;margin:0 0 16px}
+.tst .who{margin-top:auto;font-size:14px;font-weight:800;color:var(--ink)}
+.tst .who span{font-weight:600;color:var(--muted-2)}
+
 /* ---------- FAQ ---------- */
 .faq{margin-top:32px;max-width:820px;margin-left:auto;margin-right:auto}
 .faq details{background:#fff;border:1px solid var(--line);border-radius:var(--card);
@@ -591,6 +602,39 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
           <li><svg class="mk" viewBox="0 0 16 16" fill="none" stroke="#74A0FD" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>A team working behind the scenes</li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="testimonials">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">From real families</div>
+      <h2>Parents and athletes who <span class="blue">stopped guessing.</span></h2>
+      <p class="lede" style="margin-top:18px">Real results from families who worked with our coaches &mdash; college rosters, scholarships, and a recruiting process that finally made sense.</p>
+    </div>
+    <div class="tstwrap rv">
+      <div class="tst"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Chase gave my son an opportunity he would have never gotten without this service. He is currently playing college athletics at Whittier College and getting a degree in business. We are so thankful for Chase and this service."</p>
+        <div class="who">&mdash; Shane Ortega <span>(parent &middot; with Chase Grant)</span></div></div>
+      <div class="tst"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"We used The Athlete Market and got phenomenal results. From call to text support and guidance, which led us into a scholarship at Gateway College. Phenomenal service and would recommend to anyone."</p>
+        <div class="who">&mdash; Ralph Dipiero <span>(parent &middot; with Chase Grant)</span></div></div>
+      <div class="tst"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Had my two kids work with Coach Deemer while they were playing high school and club soccer. This made a huge difference &mdash; I could just be a dad who watches on the sideline, knowing a trusted college coach is doing all the coaching work off the field. Both kids played college soccer after high school, at D1 and D2."</p>
+        <div class="who">&mdash; Geoff McClellan <span>(parent &middot; with Matthew Deemer)</span></div></div>
+      <div class="tst"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Trey gave me the full blueprint on what I needed to do in order to play D1 baseball. He also helped me prepare and develop. This has been a game changer working with a coach who is actually in College/Pro baseball."</p>
+        <div class="who">&mdash; Adan Jacobs <span>(athlete &middot; with Trey Newman)</span></div></div>
+      <div class="tst"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"You usually have to travel to camps or showcases and pay thousands of dollars for your kid to talk with a coach for 10 seconds. This is by far the most genuine and beneficial experience we have participated in. Not only did our daughter play college softball &mdash; we now have a new lifelong friend."</p>
+        <div class="who">&mdash; Rebecca Solari <span>(parent &middot; with Lacey Craft)</span></div></div>
+      <div class="tst"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Chase single-handedly helped my son get into college. He wasn't the biggest or fastest kid, but with his guidance and network it made a huge difference and opened up an opportunity that might not have been there."</p>
+        <div class="who">&mdash; Dave Martinez <span>(parent &middot; with Chase Grant)</span></div></div>
+    </div>
+    <div class="center rv" style="margin-top:26px">
+      <a class="btn btn-lg btn-outline" href="https://theathletemarket.com/testimonials" target="_blank" rel="noopener">Read more parent reviews</a>
     </div>
   </div>
 </section>
