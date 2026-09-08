@@ -239,6 +239,14 @@ p{margin:0}
 .split .yes{border-color:rgba(116,160,253,.45);background:rgba(21,93,252,.12);color:#E4E9F2}
 .split .yes b{color:#74A0FD}
 
+/* ---------- pre-CTA closer (why now + risk reversal) ---------- */
+.reassure{max-width:720px;margin:28px auto 0;text-align:center;background:var(--accent-soft);
+  border:1px solid #D6E4FF;border-radius:var(--card);padding:32px 26px}
+.reassure .l{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:12px}
+.reassure p{font-size:clamp(16px,4vw,18px);color:var(--muted);line-height:1.6;margin:0 auto 22px;max-width:560px}
+.reassure .sub-cta{margin-top:14px;color:var(--muted-2)}
+
 /* ---------- FAQ ---------- */
 .faq{margin-top:32px;max-width:820px;margin-left:auto;margin-right:auto}
 .faq details{background:#fff;border:1px solid var(--line);border-radius:var(--card);
@@ -504,10 +512,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     </div>
     <div class="founder">
       <div class="rv">
-        <!-- FOUNDER PHOTO: upload your headshot as landing/founder.jpg (same
-             folder as this file) and it appears automatically. Until the file
-             exists, a clean on-brand avatar shows instead of a broken image. -->
-        <div class="frame"><img id="founderImg" alt="Chase Grant, founder of The Athlete Market" src="founder.jpg"></div>
+        <!-- FOUNDER PHOTO: landing/IMG_2449.jpg. The avatar fallback covers any load failure. -->
+        <div class="frame"><img id="founderImg" alt="Chase Grant, founder of The Athlete Market" src="IMG_2449.jpg"></div>
         <p class="cap">Chase Grant &middot; Founder</p>
       </div>
       <div class="rv body">
@@ -619,7 +625,36 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   </div>
 </section>
 
-<section class="sec" id="apply">
+<section class="sec" id="why-now">
+  <div class="wrap">
+    <div class="center rv">
+      <div class="eyebrow">Why start now</div>
+      <h2>The recruiting clock is <span class="blue">already running.</span></h2>
+      <p class="lede" style="margin-top:18px">Coaches evaluate athletes years before signing day, and roster spots come off the board quietly. The families who start early are the ones with real choices later &mdash; the ones who wait are left hoping. Starting today costs nothing, and puts time back on your athlete's side.</p>
+    </div>
+
+    <div class="knowbox rv" style="margin-top:34px">
+      <h3>What your family walks away with</h3>
+      <div class="knows">
+        <div class="know"><i>&#10003;</i>A recruiting plan built for your athlete's sport, position &amp; level</div>
+        <div class="know"><i>&#10003;</i>A targeted list of programs that realistically fit</div>
+        <div class="know"><i>&#10003;</i>An honest evaluation of where they project right now</div>
+        <div class="know"><i>&#10003;</i>A coach-outreach strategy that actually gets replies</div>
+        <div class="know"><i>&#10003;</i>A clear, grad-year timeline of what to do and when</div>
+        <div class="know"><i>&#10003;</i>A real person to call when a coach emails &mdash; or when nobody does</div>
+      </div>
+    </div>
+
+    <div class="reassure rv">
+      <div class="l">Start with a free, no-obligation consultation</div>
+      <p>Applying takes about 60 seconds and commits you to nothing. On the call you'll get a straight read on where your athlete stands &mdash; and if we're not the right fit, we'll tell you and point you somewhere better. Either way, you leave knowing more than you do right now.</p>
+      <a class="btn btn-lg" href="#apply" data-cta="why-now">See if your athlete qualifies <span class="arw">&rarr;</span></a>
+      <p class="sub-cta">Free consultation &middot; Every application reviewed personally &middot; No obligation</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec tint" id="apply">
   <div class="wrap" style="max-width:780px">
     <div class="center rv">
       <div class="eyebrow">Application</div>
