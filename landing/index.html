@@ -930,10 +930,28 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
        a clean call list. Leave blank to skip; Netlify Forms still stores every
        lead as backup either way.
        ======================================================================== */
-    sheetEndpoint: "https://script.google.com/macros/s/AKfycbyY999_kHDL5q_fmhUt71Y-ZsUUiuLcJgIwje5UOAplfmEkocQqmJeEHfUNhlpwJvRr_Q/exec"
+    sheetEndpoint: "https://script.google.com/macros/s/AKfycbyY999_kHDL5q_fmhUt71Y-ZsUUiuLcJgIwje5UOAplfmEkocQqmJeEHfUNhlpwJvRr_Q/exec",
+
+    /* ==== MICROSOFT CLARITY (heatmaps + session recordings) =================
+       Paste your Clarity Project ID here (clarity.microsoft.com → your project
+       → Settings → Overview, or the id in the install snippet). Leave blank to
+       keep Clarity OFF. Once set, the page loads Clarity automatically.
+       ======================================================================== */
+    clarityId: ""
   };
 
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Microsoft Clarity (heatmaps + session recordings) ---------- */
+  var CLARITY_ON = /^[a-z0-9]{5,}$/i.test(CONFIG.clarityId);
+  (function initClarity(){
+    if(!CLARITY_ON) return;
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", CONFIG.clarityId);
+  })();
 
   /* ---------- Meta Pixel bootstrap + safe event helper ---------- */
   var PIXEL_ON = /^\d{6,}$/.test(CONFIG.metaPixelId);
